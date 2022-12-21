@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Controllers;
+
+use App\Models\NewsModel;
+
+class HomeController extends Controller
+{
+    protected NewsModel $model;
+    public function __construct(NewsModel $newsModel)
+    {
+        $this->model = $newsModel;
+    }
+
+    public function index()
+    {
+        $data = ['title' => "home page", "news" => $this->model->getActiveNews()];
+        $this->view("home/index", $data);
+    }
+}
+
