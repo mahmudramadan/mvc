@@ -16,9 +16,7 @@ class AuthorModel
      */
     public function createAuthor(array $data): int
     {
-        DB::statement("INSERT INTO authors (name, active, created_at) 
-                        value (?,?,?)",
-            [$data['name'], $data['active'], $data['created_at']]);
+        DB::statement("INSERT INTO authors (name, active, created_at) value (?,?,?)", [$data['name'], $data['active'], $data['created_at']]);
         return (int)DB::getPdo()->lastInsertId();
     }
 

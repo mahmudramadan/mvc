@@ -15,12 +15,12 @@ class Container implements ContainerInterface
 
     /**
      * @param string $id
-     * @return mixed|object
+     * @return object
      * @throws ContainerException
      * @throws NotFoundException
      * @throws ReflectionException
      */
-    public function get(string $id)
+    public function get(string $id): object
     {
         if ($this->has($id)) {
             $entry = $this->entries[$id];
@@ -31,11 +31,11 @@ class Container implements ContainerInterface
 
     /**
      * @param string $id
-     * @return void
+     * @return bool
      */
-    public function has(string $id)
+    public function has(string $id):bool
     {
-        isset($this->entries[$id]);
+        return isset($this->entries[$id]);
     }
 
     /**
@@ -68,7 +68,7 @@ class Container implements ContainerInterface
      * @param ReflectionClass $reflectionClass
      * @return object
      * @throws ContainerException
-     * @throws ReflectionException
+     * @throws ReflectionException|NotFoundException
      */
     public function getInstance(ReflectionClass $reflectionClass): object
     {
@@ -112,18 +112,4 @@ class Container implements ContainerInterface
     }
 
 
-    /**
-     * @param string $id
-     * @param string $method
-     * @return array|null
-     * @throws ContainerException
-     * @throws ReflectionException|NotFoundException
-     */
-    public function getMethodEntries(string $id, string $method): ?array
-    {
-        $reflectionClass = new ReflectionClass($id);
-        $methodData = $reflectionClass->getMethod($method);
-        $parameters = $methodData->getParameters();
-        return array_filter($this->getDependencies($reflectionClass, $parameters));
-    }
 }

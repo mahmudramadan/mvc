@@ -10,6 +10,7 @@ class HomeController extends Controller
 
     public function __construct(NewsModel $newsModel)
     {
+        parent::__construct();
         $this->model = $newsModel;
     }
 

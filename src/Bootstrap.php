@@ -12,7 +12,7 @@ $methodParameters = $routeClass->getMethodParameters();
 $container = new Container();
 try {
     $controller = $container->get($routeControllerClass);
-       call_user_func_array([$controller, $routeControllerClassMethod], $methodParameters);
+    call_user_func_array([$controller, $routeControllerClassMethod], $methodParameters);
 } catch (NotFoundExceptionInterface | ContainerExceptionInterface $e) {
     echo $e->getMessage();
 } catch (ReflectionException $e) {

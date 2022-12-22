@@ -7,6 +7,7 @@ use App\Traits\JsonResponse;
 abstract class Controller
 {
     use JsonResponse;
+
     public function __construct()
     {
         $this->generateCsrfToken();
@@ -16,7 +17,6 @@ abstract class Controller
     {
         $_SESSION['token'] = $_SESSION['token'] ?? bin2hex(random_bytes(32));
     }
-
 
     final public function view(string $filePath, array $data)
     {

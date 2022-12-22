@@ -17,6 +17,7 @@ class AuthController extends Controller
 
     public function __construct(CsrfToken $csrfToken, SecurityModel $securityModel, UserModel $model, FormValidation $formValidation)
     {
+        parent::__construct();
         $this->csrfToken = $csrfToken;
         $this->securityModel = $securityModel;
         $this->model = $model;
