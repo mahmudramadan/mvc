@@ -44,7 +44,7 @@
                                                 data-new-id="<?= $newsItem->id ?>">Edit
                                         </button>
                                         <button type="button" class="btn btn-danger delete-btn"
-                                                new-id="<?= $newsItem->id ?>">delete
+                                                data-new-id="<?= $newsItem->id ?>">delete
                                         </button>
                                     </td>
                                 </tr>

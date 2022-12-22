@@ -1,4 +1,9 @@
 let newsId = 0;
+$.ajaxSetup({
+    headers: {
+        'TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 $("#news-form").submit(function () {
     let formData = $(this).serialize();
     let authorName = $("#author_id option:selected").text();
@@ -57,7 +62,7 @@ function submitForm(formData, authorName) {
                 }
                 $(".close").click();
                 $('#news-form').trigger("reset");
-                $("#form-news-result").html("<div class='alert alert-success'> " + response.message + "</div>");
+                $("#form-result").html("<div class='alert alert-success'> " + response.message + "</div>");
             } else {
                 $("#form-news-result").html("<div class='alert alert-danger'>" + response.message + "</div>")
             }

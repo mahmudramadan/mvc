@@ -4,21 +4,24 @@ namespace App\Traits;
 
 trait JsonResponse
 {
+
     /**
      * @param string $message
+     * @return string
      */
-    public function errorResponse(string $message)
+    public function errorResponse(string $message): string
     {
-        echo json_encode(['success' => false, 'message' => $message]);
+        return json_encode(['success' => false, 'message' => $message]);
     }
 
     /**
      * @param string $message
      * @param array $data
+     * @return string
      */
-    public function successResponse(string $message, array $data = [])
+    public function successResponse(string $message, array $data = []): string
     {
-        echo json_encode(['success' => true, 'message' => $message, "data" => $data]);
+        return json_encode(['success' => true, 'message' => $message, "data" => $data]);
     }
 
 }

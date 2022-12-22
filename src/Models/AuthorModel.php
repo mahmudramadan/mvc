@@ -10,7 +10,6 @@ class AuthorModel
     {
         return DB::select("SELECT id,name FROM authors where active = 1 ");
     }
-
     /**
      * @param array $data
      * @return int
