@@ -7,7 +7,6 @@ use App\Interfaces\ResourcesInterface;
 use App\Models\AuthorModel;
 use App\Models\NewsModel;
 use App\Models\SecurityModel;
-use App\Traits\JsonResponse;
 use App\Validation\CsrfToken;
 use App\Validation\FormValidation;
 use Exception;
@@ -15,7 +14,6 @@ use Exception;
 class NewsController extends AdminController implements ResourcesInterface
 {
 
-    use JsonResponse;
 
     public FormValidation $formValidation;
     public SecurityModel $securityModel;
@@ -28,7 +26,6 @@ class NewsController extends AdminController implements ResourcesInterface
     {
         parent::__construct();
         $this->csrfToken = $csrfToken;
-        $this->csrfToken->generate();
         $this->formValidation = $formValidation;
         $this->securityModel = $securityModel;
         $this->newsModel = $newsModel;
@@ -46,7 +43,7 @@ class NewsController extends AdminController implements ResourcesInterface
 
     public function add()
     {
-        $this->checkCsrf();
+        $this->csrfToken->checkCsrf();
         $this->checkFormValidation();
         try {
             $this->formData['created_at'] = date("Y-m-d H:i");
@@ -70,7 +67,7 @@ class NewsController extends AdminController implements ResourcesInterface
 
     public function update($id)
     {
-        $this->checkCsrf();
+        $this->csrfToken->checkCsrf();
         $this->checkFormValidation();
         try {
             $this->formData['updated_at'] = date("Y-m-d H:i");
@@ -86,21 +83,12 @@ class NewsController extends AdminController implements ResourcesInterface
      */
     public function delete($id)
     {
-        $this->checkCsrf();
+        $this->csrfToken->checkCsrf();
         try {
             $this->newsModel->delete($id);
             echo $this->successResponse("item deleted successfully");
         } catch (Exception $exception) {
             echo $this->errorResponse($exception->getMessage());
-        }
-    }
-
-    private function checkCsrf()
-    {
-        $correctCsrf = $this->csrfToken->check();
-        if (!$correctCsrf) {
-            echo $this->errorResponse($this->csrfToken->getErrorMessage());
-            die;
         }
     }
 
@@ -118,10 +106,6 @@ class NewsController extends AdminController implements ResourcesInterface
     {
         $this->formData = $this->securityModel->filterData($_POST);
         $this->formValidation->apply($this->getRules(), $this->formData);
-        if (!$this->formValidation->validate()) {
-            echo $this->errorResponse($this->formValidation->getErrors());
-            die;
-        }
     }
 
 }

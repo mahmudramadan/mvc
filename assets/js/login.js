@@ -1,4 +1,10 @@
 $(document).ready(function () {
+
+    $.ajaxSetup({
+        headers: {
+            'TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     $(".form-signin").submit(function () {
         let submitButton = $("#submitButton");
         submitButton.attr("disabled", "disabled");

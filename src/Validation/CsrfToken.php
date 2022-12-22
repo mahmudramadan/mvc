@@ -2,8 +2,12 @@
 
 namespace App\Validation;
 
+use App\Traits\JsonResponse;
+
 class CsrfToken
 {
+    use JsonResponse;
+
     private array $allowedHosts = ["http://localhost"];
     private string $currentUrl;
     private string $errorMessage = "";
@@ -13,9 +17,13 @@ class CsrfToken
         $this->setCurrentRequestUrl();
     }
 
-    public function generate()
+    public function checkCsrf()
     {
-        $_SESSION['token'] =  $_SESSION['token'] ?? bin2hex(random_bytes(32));
+        $correctCsrf = $this->check();
+        if (!$correctCsrf) {
+            echo $this->errorResponse($this->getErrorMessage());
+            die;
+        }
     }
 
     private function setCurrentRequestUrl()
@@ -23,7 +31,7 @@ class CsrfToken
         $this->currentUrl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
     }
 
-    public function check(): bool
+    private function check(): bool
     {
         if (!in_array($this->currentUrl, $this->allowedHosts)) {
             $this->errorMessage = "This site is not allowed";
@@ -43,7 +51,7 @@ class CsrfToken
     /**
      * @return string
      */
-    public function getErrorMessage(): string
+    private function getErrorMessage(): string
     {
         return $this->errorMessage;
     }

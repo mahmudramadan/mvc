@@ -2,8 +2,12 @@
 
 namespace App\Validation;
 
+use App\Traits\JsonResponse;
+
 final class FormValidation
 {
+    use JsonResponse;
+
     private array $data;
     private array $rules;
     public array $errors = [];
@@ -12,9 +16,13 @@ final class FormValidation
     {
         $this->data = $data;
         $this->rules = $rules;
+        if (!$this->validate()) {
+            echo $this->errorResponse($this->getErrors());
+            die;
+        }
     }
 
-    public function validate(): bool
+    private function validate(): bool
     {
         foreach ($this->rules as $name => $rules) {
             foreach ($rules as $rule) {
@@ -27,7 +35,7 @@ final class FormValidation
         return !(count($this->errors) > 0);
     }
 
-    public function getErrors(): string
+    private function getErrors(): string
     {
         return implode("<br>", $this->errors);
     }
