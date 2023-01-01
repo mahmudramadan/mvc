@@ -1,6 +1,6 @@
 # DEFAULT PROJECT BUILT AS MVC
 
-this is a simple project contain simple route and mvc style with Illuminate DB And eloquent ORM and filp/whoops for show error 
+this is a simple project contain simple route and mvc style with Illuminate DB 
  
 ## Requirements
 
