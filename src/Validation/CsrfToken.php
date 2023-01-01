@@ -1,39 +1,70 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Validation;
 
-use App\Traits\JsonResponse;
+use App\Controllers\ResponseMessage;
+use App\Output\View;
 
+/**
+ * CsrfToken
+ *
+ * @package App\Validation
+ * @author Mahmoud Ramadan <engmahmmoudramadan@gmail.com>
+ */
 class CsrfToken
 {
-    use JsonResponse;
+    use ResponseMessage;
 
+    /**
+     * allowed hosts
+     * @var array|string[]
+     */
     private array $allowedHosts = ["http://localhost"];
-    private string $currentUrl;
+    /**
+     * request host
+     * @var string
+     */
+    private string $requestHost;
+    /**
+     * error message
+     * @var string
+     */
     private string $errorMessage = "";
+    public View $view;
 
-    public function __construct()
+    public function __construct(View $view)
     {
-        $this->setCurrentRequestUrl();
+        $this->view = $view;
+        $this->setRequestUrl();
     }
 
-    public function checkCsrf()
+    /**
+     * check csrf token is correct
+     */
+    public function checkCsrf(): void
     {
         $correctCsrf = $this->check();
         if (!$correctCsrf) {
-            echo $this->errorResponse($this->getErrorMessage());
-            die;
+            $this->view->load("json", $this->errorMessage($this->getErrorMessage()));
         }
     }
 
-    private function setCurrentRequestUrl()
+    /**
+     * set request host
+     */
+    private function setRequestUrl(): void
     {
-        $this->currentUrl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
+        $this->requestHost = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
     }
 
+    /**
+     * check csrf token is valid if it is not valid set error message
+     * @return bool
+     */
     private function check(): bool
     {
-        if (!in_array($this->currentUrl, $this->allowedHosts)) {
+        if (!in_array($this->requestHost, $this->allowedHosts)) {
             $this->errorMessage = "This site is not allowed";
             return false;
         }
@@ -49,11 +80,11 @@ class CsrfToken
     }
 
     /**
+     * get error message
      * @return string
      */
     private function getErrorMessage(): string
     {
         return $this->errorMessage;
     }
-
 }

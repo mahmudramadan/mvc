@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controllers\Admin;
 
@@ -8,49 +9,72 @@ use App\Models\UserModel;
 use App\Validation\CsrfToken;
 use App\Validation\FormValidation;
 
+/**
+ * AuthController
+ *
+ * @package App\Controllers\Admin
+ * @author Mahmoud Ramadan <engmahmmoudramadan@gmail.com>
+ */
 class AuthController extends Controller
 {
     public FormValidation $formValidation;
-    public UserModel $model;
+    public UserModel $userModel;
     public SecurityModel $securityModel;
     public CsrfToken $csrfToken;
 
-    public function __construct(CsrfToken $csrfToken, SecurityModel $securityModel, UserModel $model, FormValidation $formValidation)
+    public function __construct(CsrfToken      $csrfToken,
+                                SecurityModel  $securityModel,
+                                UserModel      $model,
+                                FormValidation $formValidation)
     {
         parent::__construct();
         $this->csrfToken = $csrfToken;
         $this->securityModel = $securityModel;
-        $this->model = $model;
+        $this->userModel = $model;
         $this->formValidation = $formValidation;
     }
 
+    /**
+     * show login page
+     */
     public function index()
     {
         if (isset($_SESSION['isLogged'])) {
             header('Location: ' . BASE_URL . "admin-page");
         }
-        $data = ['title' => "Login page", "js" => ["assets/js/login.js"]];
-        $this->view("admin/login/index", $data);
+        $this->view->load("html", [
+            'filePath' => "admin/login/index",
+            'title' => "Login page",
+            "js" => ["assets/js/login.js"]
+        ]);
     }
 
+    /**
+     * login user with email and password
+     */
     public function loginUser()
     {
         $this->csrfToken->checkCsrf();
         $data = $this->securityModel->filterData($_POST);
-        $this->formValidation->apply($this->getRules(), $data);
+        if (!$this->formValidation->validate($this->getRules(), $data)) {
+            $this->view->load("json", $this->errorMessage($this->formValidation->getErrors()));
+        }
         $email = $data['email'];
         $password = $data['password'];
-        $userData = $this->model->getUserActiveData($email);
+        $userData = $this->userModel->getUserActiveData($email);
         if (count($userData) == 0) {
-            echo $this->errorResponse("email or password is incorrect1");
+            $this->view->load("json", $this->errorMessage("email or password is incorrect1"));
         } elseif (password_verify($password, $userData[0]->password)) {
-            $this->model->setUserSession($userData[0]);
-            echo $this->successResponse("Login successful");
+            $this->userModel->setUserSession($userData[0]);
+            $this->view->load("json", $this->successMessage("Login successful"));
         } else {
-            echo $this->errorResponse("email or password is incorrect");
+            $this->view->load("json", $this->errorMessage("email or password is incorrect"));
         }
     }
 
+    /**
+     * get login rules
+     */
     public function getRules(): array
     {
         return [
@@ -59,7 +83,10 @@ class AuthController extends Controller
         ];
     }
 
-    public function logoutUser()
+    /**
+     * logout user
+     */
+    public function logoutUser(): void
     {
         session_destroy();
         header('Location: ' . BASE_URL . "home");

@@ -52,15 +52,24 @@ class NewsModel
      */
     public function createNewsItem(array $data): int
     {
-        DB::statement("INSERT INTO news (title, author_id, active, description,created_by, created_at) 
+        DB::statement(
+            "INSERT INTO news 
+    (title, author_id, active, description,created_by, created_at) 
                         value (?,?,?,?,?,?)",
-            [$data['title'], $data['author_id'], $data['active'], $data['description'], $data['created_by'], $data['created_at']]);
+            [$data['title'], $data['author_id'], $data['active'], $data['description'],
+            $data['created_by'],
+            $data['created_at']]
+        );
         return (int)DB::getPdo()->lastInsertId();
     }
 
-    public function UpdateNewsItem(array $data)
+    public function updateNewsItem(int $id, array $data)
     {
-        DB::statement("UPDATE news SET title = ?, author_id = ?, active = ?, description = ?,updated_by = ?, updated_at = ?",
-            [$data['title'], $data['author_id'], $data['active'], $data['description'], $_SESSION['userLoggedId'], $data['updated_at']]);
+        DB::statement(
+            "UPDATE news SET title = ?, author_id = ?, active = ?, description = ?,
+                updated_by = ?, updated_at = ? WHERE id = ?",
+            [$data['title'], $data['author_id'], $data['active'], $data['description'],
+                $_SESSION['userLoggedId'], $data['updated_at'],$id]
+        );
     }
 }

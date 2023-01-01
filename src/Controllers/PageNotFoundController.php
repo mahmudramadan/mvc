@@ -1,12 +1,21 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controllers;
 
+/**
+ * PageNotFoundController
+ *
+ * @package App\Controllers
+ * @author Mahmoud Ramadan <engmahmmoudramadan@gmail.com>
+ */
 class PageNotFoundController extends Controller
 {
-    public function index()
+    /**
+     * show page not found
+     */
+    public function index(): void
     {
-        $data = ['title' => "page not found."];
-        $this->view("page404/index", $data);
+        $this->view->load("html", ["filePath" => "page404/index", "title" => "page not found."]);
     }
 }

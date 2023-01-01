@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpCSValidationInspection */
+<?php
 
 namespace App;
 
@@ -8,10 +8,15 @@ use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
 
+/**
+ * Container
+ *
+ * @package Container
+ * @author Mahmoud Ramadan <engmahmmoudramadan@gmail.com>
+ */
 class Container implements ContainerInterface
 {
     private array $entries = [];
-
 
     /**
      * @param string $id
@@ -33,7 +38,7 @@ class Container implements ContainerInterface
      * @param string $id
      * @return bool
      */
-    public function has(string $id):bool
+    public function has(string $id): bool
     {
         return isset($this->entries[$id]);
     }
@@ -99,17 +104,12 @@ class Container implements ContainerInterface
         return array_map(
             function ($parameter) use ($reflectionClass) {
                 $type = $parameter->getType();
-                $name = $parameter->getName();
-                if (!$type) {
-                    throw new ContainerException("class " . $reflectionClass->getName() . " failed to resolve because parameter $name is missing type hint ");
-                }
                 if ($parameter->getClass() === null) {
                     return $parameter->getDefaultValue();
                 }
                 return $this->get($type->getName());
-            }
-            , $parameters);
+            },
+            $parameters
+        );
     }
-
-
 }

@@ -1,11 +1,9 @@
 <?php
 
-use App\config\route\RouterClass;
+use App\Config\Route\Router;
 use App\Container;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
-$routeClass = new RouterClass();
+$routeClass = new Router();
 $routeControllerClass = $routeClass->getClassName();
 $routeControllerClassMethod = $routeClass->getClassMethodName();
 $methodParameters = $routeClass->getMethodParameters();
@@ -13,8 +11,6 @@ $container = new Container();
 try {
     $controller = $container->get($routeControllerClass);
     call_user_func_array([$controller, $routeControllerClassMethod], $methodParameters);
-} catch (NotFoundExceptionInterface | ContainerExceptionInterface $e) {
-    echo $e->getMessage();
-} catch (ReflectionException $e) {
+} catch (\Throwable $e) {
     echo $e->getMessage();
 }

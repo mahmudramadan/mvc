@@ -1,32 +1,44 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Validation;
 
-use App\Traits\JsonResponse;
+use App\Controllers\ResponseMessage;
 
+/**
+ * FormValidation
+ *
+ * @package App\Validation
+ * @author Mahmoud Ramadan <engmahmmoudramadan@gmail.com>
+ */
 final class FormValidation
 {
-    use JsonResponse;
+    use ResponseMessage;
 
+    /**
+     * data that will be validated
+     * @var array
+     */
     private array $data;
-    private array $rules;
-    public array $errors = [];
 
-    public function apply(array $rules, array $data)
+    /**
+     * errors
+     * @var array
+     */
+    private array $errors = [];
+
+    /**
+     * validate all data with rules
+     * @param array $rules
+     * @param array $data
+     * @return bool
+     */
+    public function validate(array $rules, array $data): bool
     {
         $this->data = $data;
-        $this->rules = $rules;
-        if (!$this->validate()) {
-            echo $this->errorResponse($this->getErrors());
-            die;
-        }
-    }
-
-    private function validate(): bool
-    {
-        foreach ($this->rules as $name => $rules) {
-            foreach ($rules as $rule) {
-                $ruleValues = explode(":", $rule);
+        foreach ($rules as $name => $rule) {
+            foreach ($rule as $item) {
+                $ruleValues = explode(":", $item);
                 $ruleName = $ruleValues[0];
                 $value = count($ruleValues) > 1 ? $ruleValues[1] : null;
                 $this->$ruleName($name, $value);
@@ -35,40 +47,69 @@ final class FormValidation
         return !(count($this->errors) > 0);
     }
 
-    private function getErrors(): string
+    /**
+     * get errors of validation
+     * @return string
+     */
+    public function getErrors(): string
     {
         return implode("<br>", $this->errors);
     }
 
-    private function required($name, $value)
+    /**
+     * check that field is found with data
+     * @param $name
+     * @param $value
+     */
+    private function required($name, $value): void
     {
         if (!isset($this->data[$name]) || trim($this->data[$name]) == "" || $this->data[$name] == null) {
             $this->errors[] = "$name is required";
         }
     }
 
-    private function min($name, $value)
+    /**
+     * check minimum input value length
+     * @param $name
+     * @param $value
+     */
+    private function min($name, $value): void
     {
         if (strlen($this->data[$name]) < $value) {
             $this->errors[] = "$name min characters should be $value";
         }
     }
 
-    private function max($name, $value)
+    /**
+     * check maximum input value length
+     * @param $name
+     * @param $value
+     */
+    private function max($name, $value): void
     {
         if (strlen($this->data[$name]) > $value) {
             $this->errors[] = "$name max characters should be $value";
         }
     }
 
-    private function gte($name, $value)
+    /**
+     * check input value is greater than or equal value
+     * @param $name
+     * @param $value
+     */
+    private function gte($name, $value): void
     {
         if ($this->data[$name] < $value) {
             $this->errors[] = "$name should be greater than or equal $value";
         }
     }
 
-    private function email($name, $value)
+    /**
+     * check input value is valid email
+     * @param $name
+     * @param $value
+     */
+    private function email($name, $value): void
     {
         if (!filter_var($this->data[$name], FILTER_VALIDATE_EMAIL)) {
             $this->errors[] = "$name should be an email";

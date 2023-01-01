@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Capsule\Manager as DB;
 
 $db = new DB;
@@ -6,7 +7,7 @@ $db = new DB;
 $db->addConnection([
     'driver' => 'mysql',
     'host' => 'localhost',
-    'database' => 'check24',
+    'database' => 'blog',
     'username' => 'root',
     'password' => '',
     'charset' => 'utf8',
@@ -18,4 +19,3 @@ $db->addConnection([
 $db->setAsGlobal();
 // Setup the Eloquent ORM... (optional; unless you've used setEventDispatcher())
 //$db->bootEloquent();
-

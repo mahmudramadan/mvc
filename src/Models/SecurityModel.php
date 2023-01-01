@@ -1,10 +1,21 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Models;
 
+/**
+ * SecurityModel
+ *
+ * @package App\Models
+ * @author Mahmoud Ramadan <engmahmmoudramadan@gmail.com>
+ */
 class SecurityModel
 {
-
+    /**
+     * filter all inputs
+     * @param array $data
+     * @return array
+     */
     public function filterData(array $data): array
     {
         $finalData = [];

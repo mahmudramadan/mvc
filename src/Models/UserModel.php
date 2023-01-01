@@ -8,7 +8,9 @@ class UserModel
 {
     public function getUserActiveData(string $email): array
     {
-        return DB::select("select id, name, email, password FROM users where active = 1 AND email = ? LIMIT 1", [$email]);
+        return DB::select("select id, name, email, password 
+                            FROM users 
+                            where active = 1 AND email = ? LIMIT 1", [$email]);
     }
 
     public function setUserSession(object $userData): void
