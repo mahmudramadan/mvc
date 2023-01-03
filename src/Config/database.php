@@ -7,7 +7,7 @@ $db = new DB;
 $db->addConnection([
     'driver' => 'mysql',
     'host' => 'localhost',
-    'database' => 'blog',
+    'database' => 'check24',
     'username' => 'root',
     'password' => '',
     'charset' => 'utf8',

@@ -16,6 +16,6 @@ class PageNotFoundController extends Controller
      */
     public function index(): void
     {
-        $this->view->load("html", ["filePath" => "page404/index", "title" => "page not found."]);
+        $this->view("html", ["filePath" => "page404/index", "title" => "page not found."]);
     }
 }

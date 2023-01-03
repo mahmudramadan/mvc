@@ -26,7 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $this->view->load("html", [
+        $this->view("html", [
             'filePath' => 'home/index',
             'title' => "home page",
             "news" => $this->newsModel->getActiveNews()

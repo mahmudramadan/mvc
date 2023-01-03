@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Validation;
 
 use App\Controllers\ResponseMessage;
-use App\Output\View;
+use App\Output\JsonOutput;
 
 /**
  * CsrfToken
@@ -31,11 +31,11 @@ class CsrfToken
      * @var string
      */
     private string $errorMessage = "";
-    public View $view;
+    public JsonOutput $jsonOutput;
 
-    public function __construct(View $view)
+    public function __construct(JsonOutput $jsonOutput)
     {
-        $this->view = $view;
+        $this->jsonOutput = $jsonOutput;
         $this->setRequestUrl();
     }
 
@@ -46,7 +46,8 @@ class CsrfToken
     {
         $correctCsrf = $this->check();
         if (!$correctCsrf) {
-            $this->view->load("json", $this->errorMessage($this->getErrorMessage()));
+            echo $this->jsonOutput->load($this->errorMessage($this->getErrorMessage()));
+            die;
         }
     }
 

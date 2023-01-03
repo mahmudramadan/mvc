@@ -3,12 +3,12 @@
 </footer>
 <script>const BASE_URL = "<?=BASE_URL?>";</script>
 <script
-        src="/assets/js/jquery.min.js"></script>
-<script src="/assets/js/bootstrap.bundle.min.js"></script>
+        src="<?= BASE_URL ?>assets/js/jquery.min.js"></script>
+<script src="<?= BASE_URL ?>assets/js/bootstrap.bundle.min.js"></script>
 <?php
 if (isset($data['js'])) {
     foreach ($data['js'] as $jsFile) {
-        echo '<script src="' . $jsFile . '?v='.filemtime($jsFile).'"></script>';
+        echo '<script src="' . BASE_URL . $jsFile . '?v=' . BASE_URL . filemtime($jsFile) . '"></script>';
     }
 }
 ?>

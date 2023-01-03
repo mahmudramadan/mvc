@@ -2,7 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Output\View;
+use App\Output\ViewFactory;
+use App\Output\ViewStrategy;
 
 /**
  * Controller
@@ -14,11 +15,8 @@ abstract class Controller
 {
     use ResponseMessage;
 
-    public View $view;
-
     public function __construct()
     {
-        $this->view = new View();
         $this->generateCsrfToken();
     }
 
@@ -28,5 +26,17 @@ abstract class Controller
     private function generateCsrfToken(): void
     {
         $_SESSION['token'] = $_SESSION['token'] ?? bin2hex(random_bytes(32));
+    }
+
+    /**
+     * load view htm, json...etc
+     * @param string $type
+     * @param array $data
+     */
+    public function view(string $type, array $data = []): void
+    {
+        $view = ViewFactory::initialize($type);
+        $viewStrategy = new ViewStrategy($view);
+        $viewStrategy->load($data);
     }
 }

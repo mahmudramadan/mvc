@@ -42,7 +42,7 @@ class AuthController extends Controller
         if (isset($_SESSION['isLogged'])) {
             header('Location: ' . BASE_URL . "admin-page");
         }
-        $this->view->load("html", [
+        $this->view("html", [
             'filePath' => "admin/login/index",
             'title' => "Login page",
             "js" => ["assets/js/login.js"]
@@ -57,18 +57,18 @@ class AuthController extends Controller
         $this->csrfToken->checkCsrf();
         $data = $this->securityModel->filterData($_POST);
         if (!$this->formValidation->validate($this->getRules(), $data)) {
-            $this->view->load("json", $this->errorMessage($this->formValidation->getErrors()));
+            $this->view("json", $this->errorMessage($this->formValidation->getErrors()));
         }
         $email = $data['email'];
         $password = $data['password'];
         $userData = $this->userModel->getUserActiveData($email);
         if (count($userData) == 0) {
-            $this->view->load("json", $this->errorMessage("email or password is incorrect1"));
+            $this->view("json", $this->errorMessage("email or password is incorrect1"));
         } elseif (password_verify($password, $userData[0]->password)) {
             $this->userModel->setUserSession($userData[0]);
-            $this->view->load("json", $this->successMessage("Login successful"));
+            $this->view("json", $this->successMessage("Login successful"));
         } else {
-            $this->view->load("json", $this->errorMessage("email or password is incorrect"));
+            $this->view("json", $this->errorMessage("email or password is incorrect"));
         }
     }
 

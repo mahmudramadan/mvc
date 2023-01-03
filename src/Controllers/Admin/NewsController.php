@@ -45,7 +45,7 @@ class NewsController extends AdminController implements ResourcesInterface
      */
     public function index(): void
     {
-        $this->view->load("html", [
+        $this->view("html", [
             'filePath' => "admin/news/index",
             'title' => "admin news page",
             "js" => ["assets/js/news.js"],
@@ -64,9 +64,9 @@ class NewsController extends AdminController implements ResourcesInterface
             $this->formData['created_at'] = date("Y-m-d H:i");
             $this->formData['created_by'] = $_SESSION['userLoggedId'];
             $this->formData["id"] = $this->newsModel->createNewsItem($this->formData);
-            $this->view->load("json", $this->successMessage("data saved successfully", $this->formData));
+            $this->view("json", $this->successMessage("data saved successfully", $this->formData));
         } catch (Throwable $throwable) {
-            $this->view->load("json", $this->errorMessage($throwable->getMessage()));
+            $this->view("json", $this->errorMessage($throwable->getMessage()));
         }
     }
 
@@ -78,9 +78,9 @@ class NewsController extends AdminController implements ResourcesInterface
     {
         $newsItem = $this->newsModel->find($id);
         if (count($newsItem) > 0) {
-            $this->view->load("json", $this->successMessage("data loaded successfully", $newsItem));
+            $this->view("json", $this->successMessage("data loaded successfully", $newsItem));
         } else {
-            $this->view->load("json", $this->errorMessage("Item is not found"));
+            $this->view("json", $this->errorMessage("Item is not found"));
         }
     }
 
@@ -95,13 +95,13 @@ class NewsController extends AdminController implements ResourcesInterface
         try {
             $this->formData['updated_at'] = date("Y-m-d H:i");
             $this->newsModel->updateNewsItem($id, $this->formData);
-            $this->view->load("json", [
+            $this->view("json", [
                 'success' => true,
                 "data" => $this->formData,
                 'message' => "data saved successfully",
             ]);
         } catch (Throwable $throwable) {
-            $this->view->load("json", $this->errorMessage($throwable->getMessage()));
+            $this->view("json", $this->errorMessage($throwable->getMessage()));
         }
     }
 
@@ -114,12 +114,12 @@ class NewsController extends AdminController implements ResourcesInterface
         $this->csrfToken->checkCsrf();
         try {
             $this->newsModel->delete($id);
-            $this->view->load("json", [
+            $this->view("json", [
                 'success' => true,
                 'message' => "item deleted successfully",
             ]);
         } catch (Throwable $throwable) {
-            $this->view->load("json", $this->errorMessage($throwable->getMessage()));
+            $this->view("json", $this->errorMessage($throwable->getMessage()));
         }
     }
 
@@ -143,7 +143,7 @@ class NewsController extends AdminController implements ResourcesInterface
     {
         $this->formData = $this->securityModel->filterData($_POST);
         if (!$this->formValidation->validate($this->getRules(), $this->formData)) {
-            $this->view->load("json", $this->errorMessage($this->formValidation->getErrors()));
+            $this->view("json", $this->errorMessage($this->formValidation->getErrors()));
         }
     }
 }
