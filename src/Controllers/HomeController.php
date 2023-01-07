@@ -23,6 +23,7 @@ class HomeController extends Controller
 
     /**
      * show all active news page
+     * @return void
      */
     public function index()
     {
