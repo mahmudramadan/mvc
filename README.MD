@@ -9,10 +9,19 @@ Composer
 
 ## Installation
 
-Run in main project folder
+- Create DB with name mvc
+- Import Data Base tables from file DB/blog.sql
+
+open terminal in main project folder and run command
 
 ```
 composer install
+```
+
+## Run Test Cases 
+
+```
+vendor/bin/phpunit tests
 ```
 
 ## Run Script
@@ -21,10 +30,4 @@ composer install
 
 ```
 http://localhost/mvc/
-```
- 
-## Run Test Cases
-
-```
-vendor/bin/phpunit tests
 ```
