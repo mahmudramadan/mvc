@@ -10,11 +10,11 @@ use PHPUnit\Framework\TestCase;
 
 class AuthorModelTest extends TestCase
 {
-    private AuthorModel $model;
+    private AuthorModel $authorModel;
 
     protected function setUp(): void
     {
-        $this->model = new AuthorModel();
+        $this->authorModel = new AuthorModel();
     }
 
     /**
@@ -27,7 +27,7 @@ class AuthorModelTest extends TestCase
 
     public function testData(string $name, bool $active): void
     {
-        $id = $this->model->createAuthor([
+        $id = $this->authorModel->createAuthor([
             "name" => $name,
             "active" => $active,
             "created_at" => date("Y-m-d H:i:s"),

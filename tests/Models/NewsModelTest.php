@@ -17,11 +17,11 @@ use Faker\Factory as Faker;
 final class NewsModelTest extends TestCase
 {
 
-    private NewsModel $model;
+    private NewsModel $newsModel;
 
     protected function setUp(): void
     {
-        $this->model = new NewsModel();
+        $this->newsModel = new NewsModel();
     }
 
     /**
@@ -35,7 +35,7 @@ final class NewsModelTest extends TestCase
      */
     public function testData(string $title, string $description, int $author, bool $active): void
     {
-        $id = $this->model->createNewsItem([
+        $id = $this->newsModel->createNewsItem([
             "title" => $title,
             "description" => $description,
             "author_id" => $author,
