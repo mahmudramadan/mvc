@@ -31,7 +31,7 @@ class Kernel
                 $this->router->getClassMethodName()
             ], $this->router->getMethodParameters());
         } catch (\Throwable $e) {
-            print($e->getMessage());
+            print_r($e->getMessage());
         }
     }
 }

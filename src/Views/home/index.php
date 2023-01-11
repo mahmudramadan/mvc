@@ -17,7 +17,6 @@
                             <p><?php echo substr($newsItem->description, 0, 1000) ?> ....</p>
                         </div>
                         <hr>
-
                     <?php }
                 }
             } ?>

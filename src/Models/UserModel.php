@@ -13,7 +13,7 @@ class UserModel
                             where active = 1 AND email = ? LIMIT 1", [$email]);
     }
 
-    public function setUserSession(object $userData): void
+    public function setUserSession($userData): void
     {
         $_SESSION['isLogged'] = true;
         $_SESSION['userLoggedName'] = $userData->name;
